@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define BUFFER_SIZE 1024
+
+/**
+ * main - Entry point of the Monty interpreter.
+ * @argc: The number of command line arguments.
+ * @argv: An array of command line argument strings.
+ *
+ * Return: EXIT_SUCCESS on success, or EXIT_FAILURE on failure.
+ */
+int main(int argc, char *argv[])
+{
+FILE *file;
+char line[BUFFER_SIZE];
+unsigned int line_number = 0;
+size_t len;
+char *opcode;
+
+if (argc != 2)
+{
+fprintf(stderr, "USAGE: monty file\n");
+return (EXIT_FAILURE);
+}
+
+file = fopen(argv[1], "r");
+if (file == NULL)
+{
+fprintf(stderr, "Error: Can't open file %s\n", argv[1]);
+return (EXIT_FAILURE);
+}
+
+    
+while (fgets(line, BUFFER_SIZE, file) != NULL)
+{
+line_number++;
+
+len = strlen(line);
+if (len > 0 && line[len - 1] == '\n')
+line[len - 1] = '\0';
+
+if (line[0] == '\0' || line[0] == '#')
+continue;
+
+opcode = strtok(line, " \t");
+if (opcode == NULL)
+{
+fprintf(stderr, "Error: Invalid instruction at line %u\n", line_number);
+break;
+}
+
+printf("Opcode: %s\n", opcode);
+}
+
+
+fclose(file);
+
+return (EXIT_SUCCESS);
+}
